@@ -8,10 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
 
 import static com.example.vkinfo.utils.NetworkUtils.generateURL;
+import static com.example.vkinfo.utils.NetworkUtils.getResponseFromUrl;
 
 public class MainActivity extends AppCompatActivity {
     private EditText searchField;
@@ -24,20 +25,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        searchField = findViewById(R.id.et_search_field);
+        searchField = findViewById(R.id.et_search_field); //TODO: всплывающее сообщение об ошибке, если поле ввода id осталось пустым, либо null.
         searchButton = findViewById(R.id.b_search_vk);
         result = findViewById(R.id.tv_result);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                URL generatedURL = null;
+                URL generatedURL;
+                String response = null;
                 try {
                     generatedURL = generateURL(searchField.getText().toString());
-                } catch (MalformedURLException e) {
+                    response = getResponseFromUrl(generatedURL);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-                result.setText(generatedURL.toString());
+                result.setText(response);
             }
         };
 
