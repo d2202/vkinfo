@@ -3,4 +3,6 @@
     <string name="enter_id">Введите id в ВКонтакте</string>
     <string name="b_text">Search</string>
     <string name="result">Результат будет отображён здесь</string>
+    
+    <string name="error_message">Произошла ошибка, попробуйте еще раз.</string>
 </resources>

@@ -7,13 +7,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class NetworkUtils {
 
     private static final String VK_API_BASE_URL = "https://api.vk.com/";
     private static final String VK_USERS_GET = "method/users.get";
-    private static final String VK_ACCESS_TOKEN_URL ="access_token";
+    private static final String VK_ACCESS_TOKEN_URL = "access_token";
     private static final String VK_API_TOKEN = "";
     private static final String PARAM_USER_ID = "user_ids";
     private static final String PARAM_VERSION_URL = "v";
@@ -34,7 +35,7 @@ public class NetworkUtils {
     }
 
     public static String getResponseFromUrl(URL url) throws IOException {
-        HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
         try {
             InputStream in = urlConnection.getInputStream();
@@ -49,6 +50,8 @@ public class NetworkUtils {
             } else {
                 return null;
             }
+        } catch (UnknownHostException e) {
+            return null;
         } finally {
             urlConnection.disconnect();
         }
