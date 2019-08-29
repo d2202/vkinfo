@@ -14,7 +14,7 @@ public class NetworkUtils {
     private static final String VK_API_BASE_URL = "https://api.vk.com/";
     private static final String VK_USERS_GET = "method/users.get";
     private static final String VK_ACCESS_TOKEN_URL ="access_token";
-    private static final String VK_API_TOKEN = "ea158b64ea158b64ea158b64a8ea7905aceea15ea158b64b770e039aa2e560f5e8496da";
+    private static final String VK_API_TOKEN = "";
     private static final String PARAM_USER_ID = "user_ids";
     private static final String PARAM_VERSION_URL = "v";
     private static final String PARAM_VERSION = "5.8";
