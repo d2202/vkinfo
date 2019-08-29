@@ -2,6 +2,7 @@ package com.example.vkinfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.example.vkinfo.utils.NetworkUtils.generateURL;
@@ -19,6 +21,24 @@ public class MainActivity extends AppCompatActivity {
     private Button searchButton;
     private TextView result;
 
+    class VKQueryTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            String response = null;
+            try {
+                response = getResponseFromUrl(urls[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String response){
+            result.setText(response);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +52,14 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                URL generatedURL;
-                String response = null;
+                URL generatedURL = null;
                 try {
                     generatedURL = generateURL(searchField.getText().toString());
-                    response = getResponseFromUrl(generatedURL);
-                } catch (IOException e) {
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-                result.setText(response);
+                new VKQueryTask().execute(generatedURL);
+
             }
         };
 
