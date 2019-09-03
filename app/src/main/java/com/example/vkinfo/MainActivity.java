@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,16 +66,26 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
                     JSONArray jsonArray = jsonResponse.getJSONArray("response");
-                    JSONObject userInfo = jsonArray.getJSONObject(0);
 
-                    id = userInfo.getString("id");
-                    firstName = userInfo.getString("first_name");
-                    lastName = userInfo.getString("last_name");
+                    String resultingString = "";
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject userInfo = jsonArray.getJSONObject(i);
+                        id = userInfo.getString("id");
+                        firstName = userInfo.getString("first_name");
+                        lastName = userInfo.getString("last_name");
+
+                        //TODO: RECYCLER VIEW
+                        resultingString += "Id: " + id + "\n" + "Имя: " + firstName + "\n" + "Фамилия: " + lastName
+                                + "\n\n";
+                    }
+
+                    result.setText(resultingString);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                String resultingString = "Id: " + id + "\n" + "Имя: " + firstName + "\n" + "Фамилия: " + lastName;
-                result.setText(resultingString);
+
 
                 showResultTextView();
             } else {
@@ -90,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        searchField = findViewById(R.id.et_search_field); //TODO: всплывающее сообщение об ошибке, если поле ввода id осталось пустым, либо null.
+        searchField = findViewById(R.id.et_search_field);
         searchButton = findViewById(R.id.b_search_vk);
         result = findViewById(R.id.tv_result);
         errorMessage = findViewById(R.id.tv_error_message);
@@ -100,13 +111,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 URL generatedURL = null;
-                try {
-                    generatedURL = generateURL(searchField.getText().toString());
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                new VKQueryTask().execute(generatedURL);
+                String searchFieldStr = searchField.getText().toString();
+                if (searchFieldStr.length() == 0 || searchFieldStr == null) {
+                    Toast.makeText(searchButton.getContext(), "Строка для поиска пуста!", Toast.LENGTH_SHORT).show();
+                } else {
+                    try {
+                        generatedURL = generateURL(searchFieldStr);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    new VKQueryTask().execute(generatedURL);
 
+                }
             }
         };
 

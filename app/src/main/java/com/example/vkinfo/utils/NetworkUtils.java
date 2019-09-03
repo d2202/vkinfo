@@ -21,11 +21,11 @@ public class NetworkUtils {
     private static final String PARAM_VERSION = "5.8";
 
     /* генерирует URL на основании id который пришел от пользователя */
-    public static URL generateURL(String userId) throws MalformedURLException {
+    public static URL generateURL(String userIds) throws MalformedURLException {
         Uri builtUri = Uri.parse(VK_API_BASE_URL + VK_USERS_GET)
                 .buildUpon() //надстройка для добавления параметров к URI
                 //добавление параметра в надстройку
-                .appendQueryParameter(PARAM_USER_ID, userId)
+                .appendQueryParameter(PARAM_USER_ID, userIds)
                 .appendQueryParameter(PARAM_VERSION_URL, PARAM_VERSION)
                 .appendQueryParameter(VK_ACCESS_TOKEN_URL, VK_API_TOKEN)
                 .build();
