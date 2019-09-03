@@ -2,6 +2,8 @@ package com.example.vkinfo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.vkinfo.utils.SearchResultActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,16 +31,21 @@ public class MainActivity extends AppCompatActivity {
     private Button searchButton;
     private TextView result;
     private TextView errorMessage;
+    private TextView errorUserNotFound;
     private ProgressBar loadingIndicator;
 
-    private void showResultTextView() {
-        result.setVisibility(View.VISIBLE);
-        errorMessage.setVisibility(View.INVISIBLE);
-    }
 
     private void showErrorTextView() {
         result.setVisibility(View.INVISIBLE);
         errorMessage.setVisibility(View.VISIBLE);
+        errorUserNotFound.setVisibility(View.INVISIBLE);
+
+    }
+
+    private void showUserNotFound() {
+        result.setVisibility(View.INVISIBLE);
+        errorMessage.setVisibility(View.INVISIBLE);
+        errorUserNotFound.setVisibility(View.VISIBLE);
     }
 
     class VKQueryTask extends AsyncTask<URL, Void, String> {
@@ -65,29 +74,48 @@ public class MainActivity extends AppCompatActivity {
             if (response != null && !response.equals("")) {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
-                    JSONArray jsonArray = jsonResponse.getJSONArray("response");
 
-                    String resultingString = "";
+                    //TODO: РАЗБЕРИСЬ ПОЧЕМУ НЕ РАБОТАЕТ
+                    if (jsonResponse.has("error")){
+                        JSONArray jsonArray = jsonResponse.getJSONArray("error");
+                        JSONObject errorInfo = jsonArray.getJSONObject(0);
+                        String errorString = "";
+                        String errorCode = errorInfo.getString("error_code");
+                        String errorMsg = errorInfo.getString("error_msg");
+                        errorString += "Error code " + errorCode + "\n" + "Error message: " + errorMsg;
+                        errorUserNotFound.setText(errorString);
+                        showUserNotFound();
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject userInfo = jsonArray.getJSONObject(i);
+                    }
+                    else {
+
+                        JSONArray jsonArray = jsonResponse.getJSONArray("response");
+
+                        String resultingString = "";
+
+                        JSONObject userInfo = jsonArray.getJSONObject(0);
+
                         id = userInfo.getString("id");
                         firstName = userInfo.getString("first_name");
                         lastName = userInfo.getString("last_name");
 
                         //TODO: RECYCLER VIEW
-                        resultingString += "Id: " + id + "\n" + "Имя: " + firstName + "\n" + "Фамилия: " + lastName
-                                + "\n\n";
+                        resultingString += "Id: " + id + "\n" + "Имя: " + firstName + "\n" + "Фамилия: " + lastName;
+
+                        Context context = MainActivity.this;
+                        Class destinationActivityClass = SearchResultActivity.class;
+
+                        Intent destActivityIntent = new Intent(context, destinationActivityClass);
+                        destActivityIntent.putExtra(Intent.EXTRA_TEXT, resultingString);
+
+                        startActivity(destActivityIntent);
                     }
 
-                    result.setText(resultingString);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-
-                showResultTextView();
             } else {
                 showErrorTextView();
             }
@@ -106,13 +134,14 @@ public class MainActivity extends AppCompatActivity {
         result = findViewById(R.id.tv_result);
         errorMessage = findViewById(R.id.tv_error_message);
         loadingIndicator = findViewById(R.id.pb_loading_indicator);
+        errorUserNotFound = findViewById(R.id.tv_user_not_found);
 
         View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 URL generatedURL = null;
                 String searchFieldStr = searchField.getText().toString();
-                if (searchFieldStr.length() == 0 || searchFieldStr == null) {
+                if (searchFieldStr.length() == 0) {
                     Toast.makeText(searchButton.getContext(), "Строка для поиска пуста!", Toast.LENGTH_SHORT).show();
                 } else {
                     try {

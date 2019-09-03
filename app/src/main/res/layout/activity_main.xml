@@ -56,6 +56,16 @@
             android:text="@string/error_message"
             android:visibility="invisible" />
 
+        <TextView
+            android:id="@+id/tv_user_not_found"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:padding="16dp"
+            android:text="@string/error_user_not_found"
+            android:visibility="invisible" />
+
+
         <ProgressBar
             android:id="@+id/pb_loading_indicator"
             android:layout_gravity="center"
