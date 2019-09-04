@@ -2,8 +2,6 @@
     <string name="app_name">VKInfo</string>
     <string name="enter_id">Введите id в ВКонтакте</string>
     <string name="b_text">Search</string>
-    <string name="result">Результат будет отображён здесь</string>
-
     <string name="error_message">Произошла ошибка, попробуйте еще раз.</string>
-    <string name="error_user_not_found">Увы, пользователь с таким id не найден.</string>
+    <string name="error_user_not_found">Пользователь с таким id не найден.</string>
 </resources>

@@ -34,19 +34,6 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/vertical_padding">
-    <TextView
-        android:id="@+id/tv_result"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/result"
-        android:padding="10dp"
-        android:textSize="22sp"
-        android:visibility="invisible"/>
-    </ScrollView>
         <TextView
             android:id="@+id/tv_error_message"
             android:layout_width="wrap_content"
@@ -65,12 +52,12 @@
             android:text="@string/error_user_not_found"
             android:visibility="invisible" />
 
-
         <ProgressBar
             android:id="@+id/pb_loading_indicator"
             android:layout_gravity="center"
             android:visibility="invisible"
-            android:layout_width="45dp"
-            android:layout_height="45dp" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="30dp"/>
     </FrameLayout>
 </LinearLayout>

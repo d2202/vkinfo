@@ -29,21 +29,18 @@ import static com.example.vkinfo.utils.NetworkUtils.getResponseFromUrl;
 public class MainActivity extends AppCompatActivity {
     private EditText searchField;
     private Button searchButton;
-    private TextView result;
     private TextView errorMessage;
     private TextView errorUserNotFound;
     private ProgressBar loadingIndicator;
 
 
     private void showErrorTextView() {
-        result.setVisibility(View.INVISIBLE);
         errorMessage.setVisibility(View.VISIBLE);
         errorUserNotFound.setVisibility(View.INVISIBLE);
 
     }
 
     private void showUserNotFound() {
-        result.setVisibility(View.INVISIBLE);
         errorMessage.setVisibility(View.INVISIBLE);
         errorUserNotFound.setVisibility(View.VISIBLE);
     }
@@ -74,46 +71,29 @@ public class MainActivity extends AppCompatActivity {
             if (response != null && !response.equals("")) {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
+                    JSONArray jsonArray = jsonResponse.getJSONArray("response");
 
-                    //TODO: РАЗБЕРИСЬ ПОЧЕМУ НЕ РАБОТАЕТ
-                    if (jsonResponse.has("error")){
-                        JSONArray jsonArray = jsonResponse.getJSONArray("error");
-                        JSONObject errorInfo = jsonArray.getJSONObject(0);
-                        String errorString = "";
-                        String errorCode = errorInfo.getString("error_code");
-                        String errorMsg = errorInfo.getString("error_msg");
-                        errorString += "Error code " + errorCode + "\n" + "Error message: " + errorMsg;
-                        errorUserNotFound.setText(errorString);
-                        showUserNotFound();
+                    String resultingString = "";
 
-                    }
-                    else {
+                    JSONObject userInfo = jsonArray.getJSONObject(0);
 
-                        JSONArray jsonArray = jsonResponse.getJSONArray("response");
+                    id = userInfo.getString("id");
+                    firstName = userInfo.getString("first_name");
+                    lastName = userInfo.getString("last_name");
 
-                        String resultingString = "";
+                    //TODO: RECYCLER VIEW
+                    resultingString += "Id: " + id + "\n" + "Имя: " + firstName + "\n" + "Фамилия: " + lastName;
 
-                        JSONObject userInfo = jsonArray.getJSONObject(0);
+                    Context context = MainActivity.this;
+                    Class destinationActivityClass = SearchResultActivity.class;
 
-                        id = userInfo.getString("id");
-                        firstName = userInfo.getString("first_name");
-                        lastName = userInfo.getString("last_name");
+                    Intent destActivityIntent = new Intent(context, destinationActivityClass);
+                    destActivityIntent.putExtra(Intent.EXTRA_TEXT, resultingString);
 
-                        //TODO: RECYCLER VIEW
-                        resultingString += "Id: " + id + "\n" + "Имя: " + firstName + "\n" + "Фамилия: " + lastName;
-
-                        Context context = MainActivity.this;
-                        Class destinationActivityClass = SearchResultActivity.class;
-
-                        Intent destActivityIntent = new Intent(context, destinationActivityClass);
-                        destActivityIntent.putExtra(Intent.EXTRA_TEXT, resultingString);
-
-                        startActivity(destActivityIntent);
-                    }
-
+                    startActivity(destActivityIntent);
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    showUserNotFound();
                 }
 
             } else {
@@ -131,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
         searchField = findViewById(R.id.et_search_field);
         searchButton = findViewById(R.id.b_search_vk);
-        result = findViewById(R.id.tv_result);
         errorMessage = findViewById(R.id.tv_error_message);
         loadingIndicator = findViewById(R.id.pb_loading_indicator);
         errorUserNotFound = findViewById(R.id.tv_user_not_found);
