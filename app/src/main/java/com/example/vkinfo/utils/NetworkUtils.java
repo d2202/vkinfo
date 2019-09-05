@@ -13,19 +13,24 @@ import java.util.Scanner;
 public class NetworkUtils {
 
     private static final String VK_API_BASE_URL = "https://api.vk.com/";
-    private static final String VK_USERS_GET = "method/users.get";
+    private static final String VK_METHOD_USERS_GET = "method/users.get";
     private static final String VK_ACCESS_TOKEN_URL = "access_token";
     private static final String VK_API_TOKEN = "";
     private static final String PARAM_USER_ID = "user_ids";
     private static final String PARAM_VERSION_URL = "v";
     private static final String PARAM_VERSION = "5.8";
 
+    private static final String FIELDS = "fields";
+    private static final String VK_GET_PROFILE_PIC_100 = "photo_100";
+
     /* генерирует URL на основании id который пришел от пользователя */
     public static URL generateURL(String userIds) throws MalformedURLException {
-        Uri builtUri = Uri.parse(VK_API_BASE_URL + VK_USERS_GET)
+        Uri builtUri = Uri.parse(VK_API_BASE_URL + VK_METHOD_USERS_GET)
                 .buildUpon() //надстройка для добавления параметров к URI
+
                 //добавление параметра в надстройку
                 .appendQueryParameter(PARAM_USER_ID, userIds)
+                .appendQueryParameter(FIELDS, VK_GET_PROFILE_PIC_100)
                 .appendQueryParameter(PARAM_VERSION_URL, PARAM_VERSION)
                 .appendQueryParameter(VK_ACCESS_TOKEN_URL, VK_API_TOKEN)
                 .build();

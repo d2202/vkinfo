@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
             String firstName = null;
             String lastName = null;
 
+            String profilePicUrl = null;
+
             if (response != null && !response.equals("")) {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
@@ -81,7 +83,9 @@ public class MainActivity extends AppCompatActivity {
                     firstName = userInfo.getString("first_name");
                     lastName = userInfo.getString("last_name");
 
-                    //TODO: RECYCLER VIEW
+                    profilePicUrl = userInfo.getString("photo_100");
+
+                    //TODO: RECYCLER VIEW?
                     resultingString += "Id: " + id + "\n" + "Имя: " + firstName + "\n" + "Фамилия: " + lastName;
 
                     Context context = MainActivity.this;
@@ -90,9 +94,13 @@ public class MainActivity extends AppCompatActivity {
                     Intent destActivityIntent = new Intent(context, destinationActivityClass);
                     destActivityIntent.putExtra(Intent.EXTRA_TEXT, resultingString);
 
+                    //TODO: рефакторинг, мне не нравится как это выглядит.
+                    destActivityIntent.putExtra("profilePicUrl", profilePicUrl);
+
                     startActivity(destActivityIntent);
 
                 } catch (JSONException e) {
+                    //выглядит не очень умно и другие ошибки не обработать, но у меня нет других идей.
                     showUserNotFound();
                 }
 
