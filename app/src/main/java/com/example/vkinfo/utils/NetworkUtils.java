@@ -21,7 +21,7 @@ public class NetworkUtils {
     private static final String PARAM_VERSION = "5.8";
 
     private static final String FIELDS = "fields";
-    private static final String VK_GET_PROFILE_PIC_100 = "photo_100";
+    private static final String VK_GET_PROFILE_PIC_100 = "photo_100"; //size: 100px
 
     /* генерирует URL на основании id который пришел от пользователя */
     public static URL generateURL(String userIds) throws MalformedURLException {

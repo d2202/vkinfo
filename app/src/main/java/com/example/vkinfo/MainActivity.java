@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            String id = null;
-            String firstName = null;
-            String lastName = null;
+            String id;
+            String firstName;
+            String lastName;
 
-            String profilePicUrl = null;
+            String profilePicUrl;
 
             if (response != null && !response.equals("")) {
                 try {

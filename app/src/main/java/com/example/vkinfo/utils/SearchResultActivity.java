@@ -39,8 +39,7 @@ public class SearchResultActivity extends AppCompatActivity {
         if (intentThatStartActivity.hasExtra("profilePicUrl")) {
             String picUrl = intentThatStartActivity.getStringExtra("profilePicUrl");
             new DownloadImageFromInternet((ImageView) findViewById(R.id.iw_pic))
-//                .execute("https://sun9-17.userapi.com/c848632/v848632792/140dd8/75SZAhHjyk8.jpg?ava=1"); //50 px грузится быстрее, но выглядит мелко
-                    .execute(picUrl); //100 px
+                    .execute(picUrl);
         }
 
         if (intentThatStartActivity.hasExtra(Intent.EXTRA_TEXT)) {
